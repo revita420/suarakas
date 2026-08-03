@@ -51,7 +51,7 @@ class WelcomePage extends StatelessWidget {
                         style: const TextStyle(color: Colors.black),
                         children: [
                           const TextSpan(
-                            text: 'Selamat Datang di ',
+                            text: 'Welcome to ',
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.w900,
