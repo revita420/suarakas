@@ -57,6 +57,8 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
   final int _pengeluaran = 3000000;
   final int _piutang = 500000;
 
+  DateTimeRange? _rentangTanggal;
+
   final List<Transaksi> _daftarTransaksi = const [
     Transaksi(
       judul: 'Rani - Cabai 1Kg',
@@ -112,6 +114,20 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
     setState(() => _indexNav = index);
   }
 
+  Future<void> _bukaFilterPopup(BuildContext context) async {
+    await showDialog(
+      context: context,
+      barrierColor: Colors.black45,
+      builder: (_) => _FilterPopup(
+        rentangAwal: _rentangTanggal,
+        onTampilkan: (rentang, kataKunci, jenis) {
+          setState(() => _rentangTanggal = rentang);
+          // TODO: terapin filter kataKunci & jenis ke _daftarTransaksi
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +148,7 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
                       children: [
                         _Header(
                           onKembali: () => Navigator.of(context).pop(),
-                          onFilter: () {},
+                          onFilter: () => _bukaFilterPopup(context),
                         ),
                         const SizedBox(height: 30),
                         Row(
@@ -292,7 +308,7 @@ class _Header extends StatelessWidget {
         ),
         const Spacer(),
         _TombolKotak(
-          icon: Icons.calendar_month_rounded,
+          icon: Icons.filter_alt_outlined,
           label: 'Pilih periode',
           onTap: onFilter,
         ),
@@ -612,6 +628,405 @@ class _BarisTransaksi extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// ============================================================
+/// Popup Filter — dipicu oleh tombol filter/kalender di header.
+/// ============================================================
+class _FilterPopup extends StatefulWidget {
+  const _FilterPopup({required this.rentangAwal, required this.onTampilkan});
+
+  final DateTimeRange? rentangAwal;
+  final void Function(DateTimeRange? rentang, String kataKunci, String jenis)
+      onTampilkan;
+
+  @override
+  State<_FilterPopup> createState() => _FilterPopupState();
+}
+
+class _FilterPopupState extends State<_FilterPopup> {
+  final TextEditingController _kataKunciCtrl = TextEditingController();
+  DateTimeRange? _rentang;
+  final String _jenis = 'Semua Transaksi';
+
+  static const _namaBulan = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _rentang = widget.rentangAwal;
+  }
+
+  @override
+  void dispose() {
+    _kataKunciCtrl.dispose();
+    super.dispose();
+  }
+
+  String _formatTanggal(DateTime d) =>
+      '${d.day} ${_namaBulan[d.month - 1]} ${d.year}';
+
+  String get _labelDurasi {
+    if (_rentang == null) return 'Pilih durasi';
+    return '${_formatTanggal(_rentang!.start)} - ${_formatTanggal(_rentang!.end)}';
+  }
+
+  Future<void> _pilihDurasi() async {
+    final hasil = await showDialog<DateTimeRange>(
+      context: context,
+      barrierColor: Colors.black45,
+      builder: (_) => _DurasiPopup(rentangAwal: _rentang),
+    );
+    if (hasil != null) setState(() => _rentang = hasil);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.white,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Filter',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                        fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: const Icon(Icons.close_rounded, size: 22),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Text('Kata Kunci',
+                style:
+                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 6),
+            TextField(
+              controller: _kataKunciCtrl,
+              decoration: InputDecoration(
+                hintText: 'Nama Pembeli atau Transaksi',
+                hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.black38),
+                isDense: true,
+                border: const UnderlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 18),
+            Text('Durasi',
+                style:
+                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 6),
+            GestureDetector(
+              onTap: _pilihDurasi,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(_labelDurasi,
+                        style: GoogleFonts.inter(
+                            fontSize: 12, color: Colors.black87)),
+                  ),
+                  const Icon(Icons.calendar_today_rounded,
+                      size: 18, color: _oranye),
+                ],
+              ),
+            ),
+            const Divider(height: 20),
+            Text('Jenis Transaksi',
+                style:
+                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(_jenis,
+                      style:
+                          GoogleFonts.inter(fontSize: 12, color: Colors.black54)),
+                ),
+                const Icon(Icons.chevron_right_rounded,
+                    size: 20, color: Colors.black45),
+              ],
+            ),
+            const Divider(height: 20),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: () {
+                  widget.onTampilkan(_rentang, _kataKunciCtrl.text, _jenis);
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _merah,
+                  foregroundColor: Colors.white,
+                  shape: const StadiumBorder(),
+                  elevation: 0,
+                ),
+                child: Text('Tampilkan',
+                    style: GoogleFonts.inter(
+                        fontSize: 16, fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// ============================================================
+/// Popup Durasi — kalender 2 bulan dengan range picker.
+/// ============================================================
+class _DurasiPopup extends StatefulWidget {
+  const _DurasiPopup({required this.rentangAwal});
+
+  final DateTimeRange? rentangAwal;
+
+  @override
+  State<_DurasiPopup> createState() => _DurasiPopupState();
+}
+
+class _DurasiPopupState extends State<_DurasiPopup> {
+  DateTime? _mulai;
+  DateTime? _akhir;
+
+  static const _namaBulan = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+  ];
+  static const _namaHari = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+  @override
+  void initState() {
+    super.initState();
+    _mulai = widget.rentangAwal?.start;
+    _akhir = widget.rentangAwal?.end;
+  }
+
+  void _tapTanggal(DateTime tanggal) {
+    setState(() {
+      if (_mulai == null || _akhir != null) {
+        _mulai = tanggal;
+        _akhir = null;
+      } else if (tanggal.isBefore(_mulai!)) {
+        _mulai = tanggal;
+      } else {
+        _akhir = tanggal;
+      }
+    });
+  }
+
+  String get _labelRentang {
+    if (_mulai == null) return 'Pilih tanggal';
+    String f(DateTime d) => '${d.day} ${_namaBulan[d.month - 1]} ${d.year}';
+    if (_akhir == null) return f(_mulai!);
+    return '${f(_mulai!)} - ${f(_akhir!)}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final acuan = _mulai ?? DateTime.now();
+    final bulanTampil = [
+      DateTime(acuan.year, acuan.month),
+      DateTime(acuan.year, acuan.month + 1),
+    ];
+
+    return Dialog(
+      backgroundColor: Colors.white,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Durasi',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                        fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: const Icon(Icons.close_rounded, size: 22),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 340,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: bulanTampil
+                      .map((b) => _KalenderBulan(
+                            bulan: b,
+                            mulai: _mulai,
+                            akhir: _akhir,
+                            onTap: _tapTanggal,
+                            namaBulan: _namaBulan,
+                            namaHari: _namaHari,
+                          ))
+                      .toList(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(_labelRentang,
+                style:
+                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: _mulai == null
+                    ? null
+                    : () => Navigator.of(context).pop(
+                          DateTimeRange(start: _mulai!, end: _akhir ?? _mulai!),
+                        ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _merah,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: _merah.withValues(alpha: 0.4),
+                  shape: const StadiumBorder(),
+                  elevation: 0,
+                ),
+                child: Text('Pilih',
+                    style: GoogleFonts.inter(
+                        fontSize: 16, fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Kalender satu bulan dipakai di dalam `_DurasiPopup`.
+class _KalenderBulan extends StatelessWidget {
+  const _KalenderBulan({
+    required this.bulan,
+    required this.mulai,
+    required this.akhir,
+    required this.onTap,
+    required this.namaBulan,
+    required this.namaHari,
+  });
+
+  final DateTime bulan;
+  final DateTime? mulai;
+  final DateTime? akhir;
+  final void Function(DateTime) onTap;
+  final List<String> namaBulan;
+  final List<String> namaHari;
+
+  bool _sama(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+
+  @override
+  Widget build(BuildContext context) {
+    final hariPertama = DateTime(bulan.year, bulan.month, 1);
+    final offsetMinggu = hariPertama.weekday % 7; // Minggu = 0
+    final jumlahHari = DateTime(bulan.year, bulan.month + 1, 0).day;
+
+    final sel = <DateTime?>[
+      for (var i = 0; i < offsetMinggu; i++) null,
+      for (var d = 1; d <= jumlahHari; d++) DateTime(bulan.year, bulan.month, d),
+    ];
+    while (sel.length % 7 != 0) {
+      sel.add(null);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        children: [
+          Text(
+            '${namaBulan[bulan.month - 1]} ${bulan.year}',
+            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: namaHari
+                .map((h) => Expanded(
+                      child: Center(
+                        child: Text(h,
+                            style: GoogleFonts.inter(
+                                fontSize: 10, color: Colors.black45)),
+                      ),
+                    ))
+                .toList(),
+          ),
+          const SizedBox(height: 4),
+          for (var baris = 0; baris < sel.length ~/ 7; baris++)
+            Row(
+              children: List.generate(7, (kolom) {
+                final tanggal = sel[baris * 7 + kolom];
+                if (tanggal == null) {
+                  return const Expanded(child: SizedBox(height: 30));
+                }
+
+                final adalahUjung = (mulai != null && _sama(tanggal, mulai!)) ||
+                    (akhir != null && _sama(tanggal, akhir!));
+                final dalamRentang = mulai != null &&
+                    akhir != null &&
+                    tanggal.isAfter(mulai!) &&
+                    tanggal.isBefore(akhir!);
+
+                Color? warnaLatar;
+                var warnaTeks = Colors.black87;
+                if (adalahUjung) {
+                  warnaLatar = _oranye;
+                  warnaTeks = Colors.white;
+                } else if (dalamRentang) {
+                  warnaLatar = _kuning;
+                }
+
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => onTap(tanggal),
+                    child: SizedBox(
+                      height: 30,
+                      child: Center(
+                        child: Container(
+                          width: 26,
+                          height: 26,
+                          decoration: BoxDecoration(
+                              color: warnaLatar, shape: BoxShape.circle),
+                          alignment: Alignment.center,
+                          child: Text('${tanggal.day}',
+                              style: GoogleFonts.inter(
+                                  fontSize: 11, color: warnaTeks)),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+        ],
       ),
     );
   }

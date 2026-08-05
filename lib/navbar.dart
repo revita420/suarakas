@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'buku_kas/pencatatan.dart';
+import 'catat_suara/catat_suara.dart';
 import 'kalkulator.dart';
 import 'notifikasi/notifikasi.dart';
 
@@ -52,6 +53,7 @@ bool bukaMenuNav(
 
   final tujuan = switch (index) {
     indexNavBukuKas => const HalamanPencatatan(),
+    indexNavRekamSuara => const HalamanCatatSuara(),
     indexNavNotifikasi => const HalamanNotifikasi(),
     indexNavKalkulator => const HalamanKalkulator(),
     _ => null,
