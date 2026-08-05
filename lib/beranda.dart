@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'navbar.dart';
 import 'profil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 const _hijau = Color(0xFF3E771D);
 const _merah = Color(0xFFDA3838);
@@ -22,6 +23,30 @@ class HalamanBeranda extends StatefulWidget {
 class _HalamanBerandaState extends State<HalamanBeranda> {
   int _indexNav = indexNavBeranda;
 
+  final supabase = Supabase.instance.client;
+
+  Future<void> tambahData() async {
+    try {
+      await supabase.from('barang').insert({
+        'pedagang_id': 'a2973710-c579-4def-8321-6d41c73e63dc',
+        'nama': 'Ayam',
+        'satuan': 'kg',
+        'harga_terakhir': 30000,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Data berhasil disimpan'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+        ),
+      );
+    }
+  }
   void _saatNavDipilih(int index) {
     final ditangani = bukaMenuNav(
       context,
@@ -36,6 +61,10 @@ class _HalamanBerandaState extends State<HalamanBeranda> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+      onPressed: tambahData,
+      child: const Icon(Icons.add),
+    ),
       body: SafeArea(
         bottom: false,
         child: Center(
