@@ -59,18 +59,12 @@ bool bukaMenuNav(
     _ => null,
   };
   if (tujuan == null) return false;
-  Navigator.of(context).push(
-    MaterialPageRoute<void>(builder: (_) => tujuan),
-  );
+  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => tujuan));
   return true;
 }
 
 class BilahNav extends StatelessWidget {
-  const BilahNav({
-    super.key,
-    required this.indexAktif,
-    required this.onPilih,
-  });
+  const BilahNav({super.key, required this.indexAktif, required this.onPilih});
 
   final int indexAktif;
   final ValueChanged<int> onPilih;
