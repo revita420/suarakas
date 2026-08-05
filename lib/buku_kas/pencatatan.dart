@@ -232,8 +232,12 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
                             const SizedBox(height: 12),
                             Expanded(
                               child: ListView.separated(
-                                padding:
-                                    const EdgeInsets.fromLTRB(22, 0, 22, 8),
+                                padding: const EdgeInsets.fromLTRB(
+                                  22,
+                                  0,
+                                  22,
+                                  8,
+                                ),
                                 itemCount: _daftarTransaksi.length,
                                 separatorBuilder: (_, _) =>
                                     const SizedBox(height: 12),
@@ -243,8 +247,7 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(49, 8, 49, 12),
+                              padding: const EdgeInsets.fromLTRB(49, 8, 49, 12),
                               child: Align(
                                 alignment: Alignment.center,
                                 child: SizedBox(
@@ -263,8 +266,7 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
                                     ),
                                     child: Text(
                                       'Lihat Grafik',
-                                      style:
-                                          GoogleFonts.inter(fontSize: 16),
+                                      style: GoogleFonts.inter(fontSize: 16),
                                     ),
                                   ),
                                 ),
@@ -452,7 +454,10 @@ class _AksiCepat extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: _TombolAksi(icon: Icons.add_circle_outline, label: 'Pemasukan'),
+          child: _TombolAksi(
+            icon: Icons.add_circle_outline,
+            label: 'Pemasukan',
+          ),
         ),
         SizedBox(width: 14),
         Expanded(
@@ -497,11 +502,7 @@ class _AksiCepat extends StatelessWidget {
 }
 
 class _TombolAksi extends StatelessWidget {
-  const _TombolAksi({
-    required this.icon,
-    required this.label,
-    this.onTap,
-  });
+  const _TombolAksi({required this.icon, required this.label, this.onTap});
 
   final IconData icon;
   final String label;
@@ -585,7 +586,7 @@ class _BarisTransaksi extends StatelessWidget {
               side: BorderSide(color: Colors.black.withValues(alpha: 0.20)),
               borderRadius: BorderRadius.circular(10),
             ),
-        ),
+          ),
           child: Row(
             children: [
               Container(
@@ -614,7 +615,10 @@ class _BarisTransaksi extends StatelessWidget {
                       transaksi.judul,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.inter(fontSize: 12, color: Colors.black),
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -648,7 +652,7 @@ class _FilterPopup extends StatefulWidget {
 
   final DateTimeRange? rentangAwal;
   final void Function(DateTimeRange? rentang, String kataKunci, String jenis)
-      onTampilkan;
+  onTampilkan;
 
   @override
   State<_FilterPopup> createState() => _FilterPopupState();
@@ -660,8 +664,18 @@ class _FilterPopupState extends State<_FilterPopup> {
   final String _jenis = 'Semua Transaksi';
 
   static const _namaBulan = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
 
   @override
@@ -712,7 +726,9 @@ class _FilterPopupState extends State<_FilterPopup> {
                     'Filter',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
-                        fontSize: 18, fontWeight: FontWeight.w700),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 GestureDetector(
@@ -722,52 +738,81 @@ class _FilterPopupState extends State<_FilterPopup> {
               ],
             ),
             const SizedBox(height: 18),
-            Text('Kata Kunci',
-                style:
-                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(
+              'Kata Kunci',
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: 6),
             TextField(
               controller: _kataKunciCtrl,
               decoration: InputDecoration(
                 hintText: 'Nama Pembeli atau Transaksi',
-                hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.black38),
+                hintStyle: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: Colors.black38,
+                ),
                 isDense: true,
                 border: const UnderlineInputBorder(),
               ),
             ),
             const SizedBox(height: 18),
-            Text('Durasi',
-                style:
-                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(
+              'Durasi',
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: 6),
             GestureDetector(
               onTap: _pilihDurasi,
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(_labelDurasi,
-                        style: GoogleFonts.inter(
-                            fontSize: 12, color: Colors.black87)),
+                    child: Text(
+                      _labelDurasi,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: Colors.black87,
+                      ),
+                    ),
                   ),
-                  const Icon(Icons.calendar_today_rounded,
-                      size: 18, color: _oranye),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    size: 18,
+                    color: _oranye,
+                  ),
                 ],
               ),
             ),
             const Divider(height: 20),
-            Text('Jenis Transaksi',
-                style:
-                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(
+              'Jenis Transaksi',
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: 6),
             Row(
               children: [
                 Expanded(
-                  child: Text(_jenis,
-                      style:
-                          GoogleFonts.inter(fontSize: 12, color: Colors.black54)),
+                  child: Text(
+                    _jenis,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: Colors.black54,
+                    ),
+                  ),
                 ),
-                const Icon(Icons.chevron_right_rounded,
-                    size: 20, color: Colors.black45),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  size: 20,
+                  color: Colors.black45,
+                ),
               ],
             ),
             const Divider(height: 20),
@@ -786,9 +831,13 @@ class _FilterPopupState extends State<_FilterPopup> {
                   shape: const StadiumBorder(),
                   elevation: 0,
                 ),
-                child: Text('Tampilkan',
-                    style: GoogleFonts.inter(
-                        fontSize: 16, fontWeight: FontWeight.w700)),
+                child: Text(
+                  'Tampilkan',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
           ],
@@ -815,8 +864,18 @@ class _DurasiPopupState extends State<_DurasiPopup> {
   DateTime? _akhir;
 
   static const _namaBulan = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
   static const _namaHari = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
@@ -871,7 +930,9 @@ class _DurasiPopupState extends State<_DurasiPopup> {
                     'Durasi',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
-                        fontSize: 18, fontWeight: FontWeight.w700),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 GestureDetector(
@@ -886,22 +947,28 @@ class _DurasiPopupState extends State<_DurasiPopup> {
               child: SingleChildScrollView(
                 child: Column(
                   children: bulanTampil
-                      .map((b) => _KalenderBulan(
-                            bulan: b,
-                            mulai: _mulai,
-                            akhir: _akhir,
-                            onTap: _tapTanggal,
-                            namaBulan: _namaBulan,
-                            namaHari: _namaHari,
-                          ))
+                      .map(
+                        (b) => _KalenderBulan(
+                          bulan: b,
+                          mulai: _mulai,
+                          akhir: _akhir,
+                          onTap: _tapTanggal,
+                          namaBulan: _namaBulan,
+                          namaHari: _namaHari,
+                        ),
+                      )
                       .toList(),
                 ),
               ),
             ),
             const SizedBox(height: 10),
-            Text(_labelRentang,
-                style:
-                    GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(
+              _labelRentang,
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: 14),
             SizedBox(
               width: double.infinity,
@@ -910,8 +977,8 @@ class _DurasiPopupState extends State<_DurasiPopup> {
                 onPressed: _mulai == null
                     ? null
                     : () => Navigator.of(context).pop(
-                          DateTimeRange(start: _mulai!, end: _akhir ?? _mulai!),
-                        ),
+                        DateTimeRange(start: _mulai!, end: _akhir ?? _mulai!),
+                      ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _merah,
                   foregroundColor: Colors.white,
@@ -919,9 +986,13 @@ class _DurasiPopupState extends State<_DurasiPopup> {
                   shape: const StadiumBorder(),
                   elevation: 0,
                 ),
-                child: Text('Pilih',
-                    style: GoogleFonts.inter(
-                        fontSize: 16, fontWeight: FontWeight.w700)),
+                child: Text(
+                  'Pilih',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
           ],
@@ -960,7 +1031,8 @@ class _KalenderBulan extends StatelessWidget {
 
     final sel = <DateTime?>[
       for (var i = 0; i < offsetMinggu; i++) null,
-      for (var d = 1; d <= jumlahHari; d++) DateTime(bulan.year, bulan.month, d),
+      for (var d = 1; d <= jumlahHari; d++)
+        DateTime(bulan.year, bulan.month, d),
     ];
     while (sel.length % 7 != 0) {
       sel.add(null);
@@ -977,13 +1049,19 @@ class _KalenderBulan extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: namaHari
-                .map((h) => Expanded(
-                      child: Center(
-                        child: Text(h,
-                            style: GoogleFonts.inter(
-                                fontSize: 10, color: Colors.black45)),
+                .map(
+                  (h) => Expanded(
+                    child: Center(
+                      child: Text(
+                        h,
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          color: Colors.black45,
+                        ),
                       ),
-                    ))
+                    ),
+                  ),
+                )
                 .toList(),
           ),
           const SizedBox(height: 4),
@@ -995,9 +1073,11 @@ class _KalenderBulan extends StatelessWidget {
                   return const Expanded(child: SizedBox(height: 30));
                 }
 
-                final adalahUjung = (mulai != null && _sama(tanggal, mulai!)) ||
+                final adalahUjung =
+                    (mulai != null && _sama(tanggal, mulai!)) ||
                     (akhir != null && _sama(tanggal, akhir!));
-                final dalamRentang = mulai != null &&
+                final dalamRentang =
+                    mulai != null &&
                     akhir != null &&
                     tanggal.isAfter(mulai!) &&
                     tanggal.isBefore(akhir!);
@@ -1021,11 +1101,17 @@ class _KalenderBulan extends StatelessWidget {
                           width: 26,
                           height: 26,
                           decoration: BoxDecoration(
-                              color: warnaLatar, shape: BoxShape.circle),
+                            color: warnaLatar,
+                            shape: BoxShape.circle,
+                          ),
                           alignment: Alignment.center,
-                          child: Text('${tanggal.day}',
-                              style: GoogleFonts.inter(
-                                  fontSize: 11, color: warnaTeks)),
+                          child: Text(
+                            '${tanggal.day}',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: warnaTeks,
+                            ),
+                          ),
                         ),
                       ),
                     ),
