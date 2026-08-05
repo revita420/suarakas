@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../navbar.dart';
+import 'detail_transaksi.dart';
 
 const _merah = Color(0xFFDA3838);
 const _merahTua = Color(0xFFDF1313);
@@ -17,12 +18,14 @@ class Transaksi {
   const Transaksi({
     required this.judul,
     required this.tanggal,
+    required this.jam,
     required this.jumlah,
     required this.pemasukan,
   });
 
   final String judul;
   final String tanggal;
+  final String jam;
   final int jumlah;
 
   /// True untuk uang masuk, false untuk uang keluar.
@@ -58,36 +61,42 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
     Transaksi(
       judul: 'Rani - Cabai 1Kg',
       tanggal: '26 - 07 - 2026',
+      jam: '14.35 WIB',
       jumlah: 30000,
       pemasukan: true,
     ),
     Transaksi(
       judul: 'Pembayaran Makanan',
       tanggal: '26 - 07 - 2026',
+      jam: '09.20 WIB',
       jumlah: 10000,
       pemasukan: false,
     ),
     Transaksi(
       judul: 'Rani - Cabai 1Kg',
       tanggal: '26 - 07 - 2026',
+      jam: '13.10 WIB',
       jumlah: 30000,
       pemasukan: true,
     ),
     Transaksi(
       judul: 'Rani - Cabai 1Kg',
       tanggal: '26 - 07 - 2026',
+      jam: '12.45 WIB',
       jumlah: 30000,
       pemasukan: true,
     ),
     Transaksi(
       judul: 'Rani - Cabai 1Kg',
       tanggal: '26 - 07 - 2026',
+      jam: '11.30 WIB',
       jumlah: 30000,
       pemasukan: true,
     ),
     Transaksi(
       judul: 'Rani - Cabai 1Kg',
       tanggal: '26 - 07 - 2026',
+      jam: '10.15 WIB',
       jumlah: 30000,
       pemasukan: true,
     ),
@@ -417,7 +426,7 @@ class _AksiCepat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         Expanded(
           child: _TombolAksi(icon: Icons.add_circle_outline, label: 'Pemasukan'),
@@ -435,7 +444,25 @@ class _AksiCepat extends StatelessWidget {
         ),
         SizedBox(width: 14),
         Expanded(
-          child: _TombolAksi(icon: Icons.list_alt_rounded, label: 'Aktivitas'),
+          child: _TombolAksi(
+            icon: Icons.list_alt_rounded,
+            label: 'Aktivitas',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => HalamanDetailTransaksi(
+                    judul: 'Rani - Cabai 1Kg',
+                    tanggal: '26 - 07 - 2026',
+                    jam: '14.35 WIB',
+                    jumlah: 30000,
+                    pemasukan: true,
+                    hargaMinimum: 20000,
+                    hargaMaksimum: 35000,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
         SizedBox(width: 14),
         Expanded(
@@ -447,10 +474,15 @@ class _AksiCepat extends StatelessWidget {
 }
 
 class _TombolAksi extends StatelessWidget {
-  const _TombolAksi({required this.icon, required this.label});
+  const _TombolAksi({
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
 
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -463,7 +495,7 @@ class _TombolAksi extends StatelessWidget {
         elevation: 2,
         shadowColor: const Color(0x3F000000),
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           borderRadius: BorderRadius.circular(10),
           child: SizedBox(
             height: 48,
@@ -502,63 +534,84 @@ class _BarisTransaksi extends StatelessWidget {
     final warna = transaksi.pemasukan ? _hijau : _merahTua;
     final tanda = transaksi.pemasukan ? '+' : '−';
 
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black.withValues(alpha: 0.20)),
-          borderRadius: BorderRadius.circular(10),
+    return Semantics(
+      button: true,
+      label: 'Buka detail transaksi ${transaksi.judul}',
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => HalamanDetailTransaksi(
+                judul: transaksi.judul,
+                tanggal: transaksi.tanggal,
+                jam: transaksi.jam,
+                jumlah: transaksi.jumlah,
+                pemasukan: transaksi.pemasukan,
+                hargaMinimum: 20000,
+                hargaMaksimum: 35000,
+              ),
+            ),
+          );
+        },
+        child: Container(
+          height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.black.withValues(alpha: 0.20)),
+              borderRadius: BorderRadius.circular(10),
+            ),
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: const ShapeDecoration(
-              color: Colors.white,
-              shape: OvalBorder(side: BorderSide(width: 1)),
-            ),
-            alignment: Alignment.center,
-            child: Icon(
-              transaksi.pemasukan
-                  ? Icons.arrow_downward_rounded
-                  : Icons.arrow_upward_rounded,
-              size: 18,
-              color: warna,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  transaksi.judul,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(fontSize: 12, color: Colors.black),
+          child: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const ShapeDecoration(
+                  color: Colors.white,
+                  shape: OvalBorder(side: BorderSide(width: 1)),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  transaksi.tanggal,
-                  style: GoogleFonts.inter(
-                    fontSize: 10,
-                    color: Colors.black.withValues(alpha: 0.50),
-                  ),
+                alignment: Alignment.center,
+                child: Icon(
+                  transaksi.pemasukan
+                      ? Icons.arrow_downward_rounded
+                      : Icons.arrow_upward_rounded,
+                  size: 18,
+                  color: warna,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      transaksi.judul,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.black),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      transaksi.tanggal,
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        color: Colors.black.withValues(alpha: 0.50),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '$tanda ${formatRupiah(transaksi.jumlah)}',
+                style: GoogleFonts.inter(fontSize: 12, color: warna),
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          Text(
-            '$tanda ${formatRupiah(transaksi.jumlah)}',
-            style: GoogleFonts.inter(fontSize: 12, color: warna),
-          ),
-        ],
+        ),
       ),
     );
   }
