@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'login_page.dart';
+import 'auth/login.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Aplikasi());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Aplikasi extends StatelessWidget {
+  const Aplikasi({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
           surface: Colors.white,
         ),
       ),
-      home: const WelcomePage(),
+      home: const HalamanSelamatDatang(),
     );
   }
 }
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class HalamanSelamatDatang extends StatelessWidget {
+  const HalamanSelamatDatang({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,113 +41,111 @@ class WelcomePage extends StatelessWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 430),
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 32),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                          const TextSpan(
-                            text: 'Welcome to ',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w900,
-                            ),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  const SizedBox(height: 32),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        const TextSpan(
+                          text: 'Selamat Datang di ',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
                           ),
-                          TextSpan(
-                            text: 'Suarakas',
-                            style: GoogleFonts.dancingScript(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: _AnimatedIllustration(
-                          assetPath: 'assets/images/store_illustration.png',
                         ),
+                        TextSpan(
+                          text: 'Suarakas',
+                          style: GoogleFonts.dancingScript(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Expanded(
+                    child: Center(
+                      child: _Ilustrasi(
+                        assetPath: 'assets/images/store_illustration.png',
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 40),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 92),
-                          const Text(
-                            'Sign In Now!',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 92),
+                        const Text(
+                          'Masuk Sekarang!',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const LoginPage(),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const HalamanLogin(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 92,
+                            height: 92,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFD000),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.16),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 8),
                                 ),
-                              );
-                            },
-                            child: Container(
-                              width: 92,
-                              height: 92,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFD000),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.16),
-                                    blurRadius: 18,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 42,
-                                color: Colors.black,
-                              ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 42,
+                              color: Colors.black,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 }
 
-
-class _AnimatedIllustration  extends StatelessWidget {
-  const _AnimatedIllustration({required this.assetPath});
+class _Ilustrasi extends StatelessWidget {
+  const _Ilustrasi({required this.assetPath});
 
   final String assetPath;
 
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 0.0, end: 1.0),
+      tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 1000),
       curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
+      builder: (context, nilai, child) {
         return Opacity(
-          opacity: value,
+          opacity: nilai,
           child: Transform.translate(
-            offset: Offset(0, 30 * (1 - value)),
+            offset: Offset(0, 30 * (1 - nilai)),
             child: child,
           ),
         );
@@ -158,7 +156,7 @@ class _AnimatedIllustration  extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // brush splash image (export/replace this asset yourself)
+            // Cipratan kuas di belakang ilustrasi utama.
             Image.asset(
               'assets/images/brush_splash.png',
               width: 260,
