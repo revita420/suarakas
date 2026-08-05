@@ -245,20 +245,27 @@ class _HalamanPencatatanState extends State<HalamanPencatatan> {
                             Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(49, 8, 49, 12),
-                              child: SizedBox(
-                                height: 58,
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    shape: const StadiumBorder(),
-                                    elevation: 0,
-                                  ),
-                                  child: Text(
-                                    'Lihat Grafik',
-                                    style: GoogleFonts.inter(fontSize: 20),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  height: 44,
+                                  width: 190,
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      shape: const StadiumBorder(),
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Lihat Grafik',
+                                      style:
+                                          GoogleFonts.inter(fontSize: 16),
+                                    ),
                                   ),
                                 ),
                               ),
